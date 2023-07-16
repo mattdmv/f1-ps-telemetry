@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "f1_ps_telemetry"
+version = "0.0.1"
+authors = [
+    {name = "Matija Domovic", email = "matija.domovic@yahoo.com"},
+]
+description = "My package description"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+dynamic = ["version"]
+
+[project.urls]
+"Homepage" = "https://github.com/mattdmv/f1-ps-telemetry"
+"Bug Tracker" = "https://github.com/mattdmv/f1-ps-telemetry/issues"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  ".", "src",
+]
