@@ -572,7 +572,9 @@ class EventDataDetailsMeta(type(ctypes.Union), type(PackedLittleEndianStructure)
     pass
 
 
-class EventDataDetails_V1(ctypes.Union, PackedLittleEndianStructure, metaclass=EventDataDetailsMeta):
+class EventDataDetails_V1(
+    ctypes.Union, PackedLittleEndianStructure, metaclass=EventDataDetailsMeta
+):
     """The event details packet is different for each type of event. Make sure only the correct type is interpreted."""
 
     _fields_ = [
