@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,8 +8,9 @@ version = "0.0.1"
 authors = [
     {name = "Matija Domovic", email = "matija.domovic@yahoo.com"},
 ]
-description = "My package description"
+description = "Decode F1 ps game telemetry data."
 readme = "README.md"
+license = { file="LICENSE" }
 requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -17,13 +18,14 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
-dynamic = ["version"]
+# dynamic = ["version"]
 
 [project.urls]
 "Homepage" = "https://github.com/mattdmv/f1-ps-telemetry"
 "Bug Tracker" = "https://github.com/mattdmv/f1-ps-telemetry/issues"
 
 [tool.pytest.ini_options]
-pythonpath = [
-  ".", "src",
-]
+pythonpath = [".", "src",]
+
+[tool.setuptools.packages]
+find = {}
