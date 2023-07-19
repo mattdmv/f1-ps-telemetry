@@ -32,6 +32,13 @@ class UDPUnpacker():
             raise Exception("Please pass a udp_spec parameter that is either '22' or '23'.")
         else:
             self._udp_spec = new_udp_spec
+            
+            if self._udp_spec == "22":
+                self._PacketHeader = PacketHeader22
+                self._HeaderFieldsToPacketType = HeaderFieldsToPacketType_22
+            elif self._udp_spec == "23":
+                self._PacketHeader = PacketHeader23
+                self._HeaderFieldsToPacketType = HeaderFieldsToPacketType_23  
     
     def unpack_udp_packet(self, packet: bytes) -> PackedLittleEndianStructure:
         """Convert raw UDP packet to an appropriately-typed telemetry packet.
