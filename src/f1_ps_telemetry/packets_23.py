@@ -1,43 +1,13 @@
-"""F1 22 UDP Telemetry support package
+"""F1 23 UDP Telemetry support package
 
-This package is based on the CodeMasters Forum post documenting the F1 22 packet format:
+This package is based on the CodeMasters Forum post documenting the F1 23 packet format:
 
-    https://answers.ea.com/t5/General-Discussion/F1-22-UDP-Specification/td-p/11551274
+    https://answers.ea.com/t5/General-Discussion/F1-23-UDP-Specification/td-p/12632888
 """
 
+from  packed_little_endian import PackedLittleEndianStructure
 import ctypes
 import enum
-
-#########################################################
-#                                                       #
-#  __________  PackedLittleEndianStructure  __________  #
-#                                                       #
-#########################################################
-
-
-class PackedLittleEndianStructure(ctypes.LittleEndianStructure):
-    """The standard ctypes LittleEndianStructure, but tightly packed (no field padding), and with a proper repr() function.
-
-    This is the base type for all structures in the telemetry data.
-    """
-
-    _pack_ = 1
-
-    def __repr__(self):
-        fstr_list = []
-        for (fname, ftype) in self._fields_:
-            value = getattr(self, fname)
-            if isinstance(value, (PackedLittleEndianStructure, int, float, bytes)):
-                vstr = repr(value)
-            elif isinstance(value, ctypes.Array):
-                vstr = "[{}]".format(", ".join(repr(e) for e in value))
-            else:
-                raise RuntimeError(
-                    "Bad value {!r} of type {!r}".format(value, type(value))
-                )
-            fstr = "{}={}".format(fname, vstr)
-            fstr_list.append(fstr)
-        return "{}({})".format(self.__class__.__name__, ", ".join(fstr_list))
 
 
 ###########################################
@@ -51,7 +21,7 @@ class PacketHeader(PackedLittleEndianStructure):
     """The header for each of the UDP telemetry packets."""
 
     _fields_ = [
-        ("packetFormat", ctypes.c_uint16),  # 2022
+        ("packetFormat", ctypes.c_uint16),  # 2023
         ("gameMajorVersion", ctypes.c_uint8),  # Game major version - "X.00"
         ("gameMinorVersion", ctypes.c_uint8),  # Game minor version - "1.XX"
         (
@@ -1704,67 +1674,20 @@ ButtonFlag.description = {
 ##################################
 
 # Map from (packetFormat, packetVersion, packetId) to a specific packet type.
-HeaderFieldsToPacketType = {
-    (2022, 1, 0): PacketMotionData_V1,
-    (2022, 1, 1): PacketSessionData_V1,
-    (2022, 1, 2): PacketLapData_V1,
-    (2022, 1, 3): PacketEventData_V1,
-    (2022, 1, 4): PacketParticipantsData_V1,
-    (2022, 1, 5): PacketCarSetupData_V1,
-    (2022, 1, 6): PacketCarTelemetryData_V1,
-    (2022, 1, 7): PacketCarStatusData_V1,
-    (2022, 1, 8): PacketFinalClassificationData_V1,
-    (2022, 1, 9): PacketLobbyInfoData_V1,
-    (2022, 1, 10): PacketCarDamageData_V1,
-    (2022, 1, 11): PacketSessionHistoryData_V1,
+HeaderFieldsToPacketType_23 = {
+    (2023, 1, 0): PacketMotionData_V1,
+    (2023, 1, 1): PacketSessionData_V1,
+    (2023, 1, 2): PacketLapData_V1,
+    (2023, 1, 3): PacketEventData_V1,
+    (2023, 1, 4): PacketParticipantsData_V1,
+    (2023, 1, 5): PacketCarSetupData_V1,
+    (2023, 1, 6): PacketCarTelemetryData_V1,
+    (2023, 1, 7): PacketCarStatusData_V1,
+    (2023, 1, 8): PacketFinalClassificationData_V1,
+    (2023, 1, 9): PacketLobbyInfoData_V1,
+    (2023, 1, 10): PacketCarDamageData_V1,
+    (2023, 1, 11): PacketSessionHistoryData_V1,
 }
-
-
-class UnpackError(Exception):
-    pass
-
-
-def unpack_udp_packet(packet: bytes) -> PackedLittleEndianStructure:
-    """Convert raw UDP packet to an appropriately-typed telemetry packet.
-
-    Args:
-        packet: the contents of the UDP packet to be unpacked.
-
-    Returns:
-        The decoded packet structure.
-
-    Raises:
-        UnpackError if a problem is detected.
-    """
-    actual_packet_size = len(packet)
-
-    header_size = ctypes.sizeof(PacketHeader)
-
-    if actual_packet_size < header_size:
-        raise UnpackError(
-            "Bad telemetry packet: too short ({} bytes).".format(actual_packet_size)
-        )
-
-    header = PacketHeader.from_buffer_copy(packet)
-    key = (header.packetFormat, header.packetVersion, header.packetId)
-
-    if key not in HeaderFieldsToPacketType:
-        raise UnpackError(
-            "Bad telemetry packet: no match for key fields {!r}.".format(key)
-        )
-
-    packet_type = HeaderFieldsToPacketType[key]
-
-    expected_packet_size = ctypes.sizeof(packet_type)
-
-    if actual_packet_size != expected_packet_size:
-        raise UnpackError(
-            "Bad telemetry packet: bad size for {} packet; expected {} bytes but received {} bytes.".format(
-                packet_type.__name__, expected_packet_size, actual_packet_size
-            )
-        )
-
-    return packet_type.from_buffer_copy(packet)
 
 
 #########################################################################
