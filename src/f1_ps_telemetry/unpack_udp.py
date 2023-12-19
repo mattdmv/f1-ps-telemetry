@@ -11,16 +11,16 @@ class UnpackError(Exception):
 
 
 class UDPUnpacker():
-    def __init__(self, udp_spec: str = "22"):
+    def __init__(self, udp_spec: str = "2k22"):
         self._udp_spec = udp_spec
-        if self._udp_spec == "22":
+        if self._udp_spec == "2k22":
             self._PacketHeader = PacketHeader22
             self._HeaderFieldsToPacketType = HeaderFieldsToPacketType_22
-        elif self._udp_spec == "23":
+        elif self._udp_spec == "2k23":
             self._PacketHeader = PacketHeader23
             self._HeaderFieldsToPacketType = HeaderFieldsToPacketType_23
         else:
-            raise Exception("Please pass a udp_spec parameter that is either '22' or '23'.")
+            raise Exception("Please pass a udp_spec parameter that is either '2k22' or '2k23'.")
 
     @property
     def udp_spec(self):
@@ -28,15 +28,15 @@ class UDPUnpacker():
     
     @udp_spec.setter
     def udp_spec(self, new_udp_spec):
-        if new_udp_spec not in ["22", "23"]:
-            raise Exception("Please pass a udp_spec parameter that is either '22' or '23'.")
+        if new_udp_spec not in ["2k22", "2k23"]:
+            raise Exception("Please pass a udp_spec parameter that is either '2k22' or '2k23'.")
         else:
             self._udp_spec = new_udp_spec
             
-            if self._udp_spec == "22":
+            if self._udp_spec == "2k22":
                 self._PacketHeader = PacketHeader22
                 self._HeaderFieldsToPacketType = HeaderFieldsToPacketType_22
-            elif self._udp_spec == "23":
+            elif self._udp_spec == "2k23":
                 self._PacketHeader = PacketHeader23
                 self._HeaderFieldsToPacketType = HeaderFieldsToPacketType_23  
     
