@@ -11,4 +11,5 @@ while True:
     udp_packet = udp_socket.recv(2048)
     packet = unpacker.unpack_udp_packet(udp_packet)
     print("Received:", packet)
-    print()
+    print(type(packet))
+    print('')
