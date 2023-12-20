@@ -1,9 +1,7 @@
 import ctypes
 
-from packets_22 import PacketHeader as PacketHeader22
-from packets_23 import PacketHeader as PacketHeader23
-from packets_22 import HeaderFieldsToPacketType_22
-from packets_23 import HeaderFieldsToPacketType_23
+from packets import PacketHeader as PacketHeader
+from packets import HeaderFieldsToPacketType
 from packed_little_endian import PackedLittleEndianStructure
 
 class UnpackError(Exception):
@@ -11,34 +9,13 @@ class UnpackError(Exception):
 
 
 class UDPUnpacker():
-    def __init__(self, udp_spec: str = "22"):
-        self._udp_spec = udp_spec
-        if self._udp_spec == "22":
-            self._PacketHeader = PacketHeader22
-            self._HeaderFieldsToPacketType = HeaderFieldsToPacketType_22
-        elif self._udp_spec == "23":
-            self._PacketHeader = PacketHeader23
-            self._HeaderFieldsToPacketType = HeaderFieldsToPacketType_23
-        else:
-            raise Exception("Please pass a udp_spec parameter that is either '22' or '23'.")
+    def __init__(self):
+        self._PacketHeader = PacketHeader
+        self._HeaderFieldsToPacketType = HeaderFieldsToPacketType
 
     @property
     def udp_spec(self):
-        return self._udp_spec
-    
-    @udp_spec.setter
-    def udp_spec(self, new_udp_spec):
-        if new_udp_spec not in ["22", "23"]:
-            raise Exception("Please pass a udp_spec parameter that is either '22' or '23'.")
-        else:
-            self._udp_spec = new_udp_spec
-            
-            if self._udp_spec == "22":
-                self._PacketHeader = PacketHeader22
-                self._HeaderFieldsToPacketType = HeaderFieldsToPacketType_22
-            elif self._udp_spec == "23":
-                self._PacketHeader = PacketHeader23
-                self._HeaderFieldsToPacketType = HeaderFieldsToPacketType_23  
+        return self._udp_spec 
     
     def unpack_udp_packet(self, packet: bytes) -> PackedLittleEndianStructure:
         """Convert raw UDP packet to an appropriately-typed telemetry packet.
