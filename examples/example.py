@@ -1,6 +1,6 @@
 import socket
 
-from src.f1_ps_telemetry.unpack_udp import UDPUnpacker
+from f1_ps_telemetry.unpack_udp import UDPUnpacker
 
 udp_socket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 udp_socket.bind(("", 20777))
