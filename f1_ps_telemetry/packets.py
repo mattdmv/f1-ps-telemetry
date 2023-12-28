@@ -1665,7 +1665,7 @@ ButtonFlag.description = {
 ##################################
 
 # Map from (packetFormat, packetVersion, packetId) to a specific packet type.
-HeaderFieldsToPacketType_22 = {
+HeaderFieldsToPacketType = {
     (2022, 1, 0): PacketMotionData_V1,
     (2022, 1, 1): PacketSessionData_V1,
     (2022, 1, 2): PacketLapData_V1,
