@@ -5,7 +5,7 @@ This package is based on the CodeMasters Forum post documenting the F1 22 packet
     https://answers.ea.com/t5/General-Discussion/F1-22-UDP-Specification/td-p/11551274
 """
 
-from packed_little_endian import PackedLittleEndianStructure
+from .packed_little_endian import PackedLittleEndianStructure
 import ctypes
 import enum
 
