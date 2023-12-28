@@ -1,8 +1,8 @@
 import ctypes
 
-from packets import PacketHeader
-from packets import HeaderFieldsToPacketType
-from packed_little_endian import PackedLittleEndianStructure
+from .packets import PacketHeader
+from .packets import HeaderFieldsToPacketType
+from .packed_little_endian import PackedLittleEndianStructure
 
 class UnpackError(Exception):
     pass
